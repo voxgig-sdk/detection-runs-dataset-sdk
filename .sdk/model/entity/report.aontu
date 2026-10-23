@@ -1,0 +1,206 @@
+# Entity: report
+
+main: kit: entity: report: {
+
+  alias: field: {}
+
+  fields: {
+    canonical: {
+      h: "Canonical"
+      n: "canonical"
+      r: true
+      sh: "The run's report page."
+      t: "`$STRING`"
+    }
+    checks: {
+      h: "Checks"
+      n: "checks"
+      r: true
+      t: "`$ARRAY`"
+    }
+    finished_at: {
+      h: "Finished At"
+      n: "finished_at"
+      r: true
+      sh: "ISO 8601 (date-only where only a date was recorded)."
+      t: "`$STRING`"
+    }
+    host: {
+      h: "Host"
+      n: "host"
+      r: true
+      sh: "Machine the run was driven from, e.g."
+      t: "`$STRING`"
+    }
+    id: {
+      h: "Id"
+      n: "id"
+      r: false
+      t: "`$STRING`"
+    }
+    kernel: {
+      h: "Kernel"
+      n: "kernel"
+      r: true
+      sh: "Browser build the run was headlined on, e.g."
+      t: "`$STRING`"
+    }
+    license: {
+      h: "License"
+      n: "license"
+      r: true
+      sh: "e.g."
+      t: "`$STRING`"
+    }
+    notes: {
+      h: "Notes"
+      n: "notes"
+      r: true
+      sh: "Observations, limits and retractions."
+      t: "`$ARRAY`"
+    }
+    proxy: {
+      h: "Proxy"
+      n: "proxy"
+      r: true
+      sh: "The network exit a run or check used."
+      t: "`$OBJECT`"
+    }
+    run_id: {
+      h: "Run Id"
+      n: "run_id"
+      r: true
+      sh: "Run id, e.g."
+      t: "`$STRING`"
+    }
+    schema_version: {
+      h: "Schema Version"
+      n: "schema_version"
+      r: true
+      t: "`$INTEGER`"
+    }
+    segments: {
+      h: "Segments"
+      n: "segments"
+      r: true
+      t: "`$ARRAY`"
+    }
+    slug: {
+      h: "Slug"
+      n: "slug"
+      r: true
+      sh: "Report slug, the `{slug}` path parameter, e.g."
+      t: "`$STRING`"
+    }
+    started_at: {
+      h: "Started At"
+      n: "started_at"
+      r: true
+      sh: "ISO 8601 (date-only where only a date was recorded)."
+      t: "`$STRING`"
+    }
+    subjects: {
+      h: "Subjects"
+      n: "subjects"
+      r: true
+      t: "`$ARRAY`"
+    }
+    title: {
+      h: "Title"
+      n: "title"
+      r: true
+      t: "`$STRING`"
+    }
+  }
+
+  id: {
+    field: "id"
+    name: "id"
+  }
+
+  name: "report"
+  op: {
+    list: {
+      name: "list"
+      points: [
+        {
+          co: {
+            id: "GET /reports"
+            source: "openapi3"
+            version: 2
+          }
+          m: "GET"
+          o: "/reports"
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "reports"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.runs`"
+          }
+        }
+      ]
+    }
+    load: {
+      name: "load"
+      points: [
+        {
+          co: {
+            id: "GET /reports/{slug}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                ex: "detection-2026-09"
+                k: "param"
+                n: "id"
+                or: "slug"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/reports/{slug}"
+          q: {
+            exist: [
+              "id"
+            ]
+          }
+          r: {
+            param: {
+              slug: "id"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "reports"
+            }
+            {
+              var: "id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

@@ -1,0 +1,391 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Detection Runs Dataset",
+    "description": "AntiBrow's public dataset of browser-fingerprinting and anti-bot detection runs (CC BY 4.0, no key, CORS open). Knowledge comes from the field documentation at https://antibrow.com/reports/data and from live GET probes on 2026-10-23, when two runs were published (`detection-2026-08`, `detection-2026-09`). `/reports/{slug}` was found by probing (the docs name only `/api/v1/reports`); it returns the same object as the static file `https://antibrow.com/reports/{slug}/data.json`, and `/reports` returns the same body as `https://antibrow.com/reports/all.json`. Unknown slugs return 404 with `{\"error\":{\"code\":\"NOT_FOUND\",\"message\":\"Unknown run\"}}`. Not modelled: the CSV downloads. Unverified: the full set of `metrics` keys, which vary by detector.",
+    "version": "1.0.0",
+    "contact": {
+      "url": "https://antibrow.com/reports/data"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://antibrow.com/api/v1",
+      "description": "AntiBrow public API"
+    }
+  ],
+  "paths": {
+    "/reports": {
+      "get": {
+        "summary": "List every run",
+        "description": "Returns every published run, each with all of its checks.",
+        "operationId": "listRuns",
+        "responses": {
+          "200": {
+            "description": "Every run",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "schema_version": {
+                      "type": "integer"
+                    },
+                    "license": {
+                      "type": "string",
+                      "description": "e.g. `CC-BY-4.0`."
+                    },
+                    "canonical": {
+                      "type": "string",
+                      "description": "The dataset page."
+                    },
+                    "documentation": {
+                      "type": "string",
+                      "description": "The method page."
+                    },
+                    "runs": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Run"
+                      }
+                    }
+                  },
+                  "required": [
+                    "schema_version",
+                    "license",
+                    "canonical",
+                    "documentation",
+                    "runs"
+                  ],
+                  "additionalProperties": true
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/reports/{slug}": {
+      "get": {
+        "summary": "Get one run",
+        "description": "Returns one run by its report slug.",
+        "operationId": "getRun",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "description": "Report slug of the run.",
+            "schema": {
+              "type": "string"
+            },
+            "example": "detection-2026-09"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The run",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Run"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Run": {
+        "type": "object",
+        "description": "One published detection run: its setup and every check result.",
+        "properties": {
+          "schema_version": {
+            "type": "integer"
+          },
+          "run_id": {
+            "type": "string",
+            "description": "Run id, e.g. `2026-09`."
+          },
+          "slug": {
+            "type": "string",
+            "description": "Report slug, the `{slug}` path parameter, e.g. `detection-2026-09`."
+          },
+          "title": {
+            "type": "string"
+          },
+          "started_at": {
+            "type": "string",
+            "description": "ISO 8601 (date-only where only a date was recorded)."
+          },
+          "finished_at": {
+            "type": "string",
+            "description": "ISO 8601 (date-only where only a date was recorded)."
+          },
+          "kernel": {
+            "type": "string",
+            "description": "Browser build the run was headlined on, e.g. `Chrome 153`."
+          },
+          "host": {
+            "type": "string",
+            "description": "Machine the run was driven from, e.g. `macOS, headful`."
+          },
+          "proxy": {
+            "$ref": "#/components/schemas/Proxy"
+          },
+          "subjects": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Subject"
+            }
+          },
+          "segments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Segment"
+            }
+          },
+          "checks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Check"
+            }
+          },
+          "notes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Observations, limits and retractions."
+          },
+          "license": {
+            "type": "string",
+            "description": "e.g. `CC-BY-4.0`."
+          },
+          "canonical": {
+            "type": "string",
+            "description": "The run's report page."
+          }
+        },
+        "required": [
+          "schema_version",
+          "run_id",
+          "slug",
+          "title",
+          "started_at",
+          "finished_at",
+          "kernel",
+          "host",
+          "proxy",
+          "subjects",
+          "segments",
+          "checks",
+          "notes",
+          "license",
+          "canonical"
+        ],
+        "additionalProperties": true
+      },
+      "Proxy": {
+        "type": "object",
+        "description": "The network exit a run or check used.",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "Exit type, e.g. `residential`, `flagged-proxy-pool`."
+          },
+          "exit_ip": {
+            "type": "string",
+            "description": "Exit IP, sometimes with the last octet masked (e.g. `148.135.219.x`), or null.",
+            "nullable": true
+          },
+          "exit_block": {
+            "type": "string",
+            "description": "Free-text note on how exits were chosen. Present on some proxies only."
+          },
+          "geo": {
+            "type": "string",
+            "description": "Exit location, e.g. `Las Vegas, US`, or null.",
+            "nullable": true
+          }
+        },
+        "required": [
+          "type",
+          "exit_ip",
+          "geo"
+        ],
+        "additionalProperties": true
+      },
+      "Subject": {
+        "type": "object",
+        "description": "A browser or tool compared in a run.",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Subject id that checks refer to, e.g. `antibrow`."
+          },
+          "name": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string",
+            "description": "Version, or null when not recorded.",
+            "nullable": true
+          },
+          "config": {
+            "type": "string",
+            "description": "How the subject was configured."
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "version",
+          "config"
+        ],
+        "additionalProperties": true
+      },
+      "Segment": {
+        "type": "object",
+        "description": "A measurement session within a run.",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Segment id that checks refer to, e.g. `repeat-flagged`."
+          },
+          "label": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "started_at": {
+            "type": "string",
+            "description": "ISO 8601 (date-only where only a date was recorded)."
+          },
+          "finished_at": {
+            "type": "string",
+            "description": "ISO 8601 (date-only where only a date was recorded)."
+          },
+          "presented": {
+            "type": "object",
+            "description": "What the browser presented during the segment. Present on some segments only.",
+            "properties": {
+              "user_agent": {
+                "type": "string"
+              },
+              "platform": {
+                "type": "string"
+              },
+              "timezone": {
+                "type": "string"
+              },
+              "languages": {
+                "type": "string"
+              },
+              "hardware": {
+                "type": "string"
+              },
+              "webdriver": {
+                "type": "string"
+              },
+              "webgl_vendor": {
+                "type": "string"
+              },
+              "webgl_renderer": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "id",
+          "label",
+          "description",
+          "started_at",
+          "finished_at"
+        ],
+        "additionalProperties": true
+      },
+      "Check": {
+        "type": "object",
+        "description": "One detector result for one subject in one round. `proxy` is present only when the check did not use the run-level exit.",
+        "properties": {
+          "detector": {
+            "type": "string",
+            "description": "What was measured: a detector site, a commercial wall, or a coherence probe, e.g. `cloudflare`."
+          },
+          "target": {
+            "type": "string",
+            "description": "Site the detector was met on, or null for probes needing no target.",
+            "nullable": true
+          },
+          "subject": {
+            "type": "string",
+            "description": "The `subjects[].id` this check is about."
+          },
+          "result": {
+            "type": "string",
+            "enum": [
+              "pass",
+              "fail",
+              "blocked",
+              "inconclusive",
+              "error"
+            ],
+            "description": "Verdict."
+          },
+          "detail": {
+            "type": "string",
+            "description": "What happened, in one sentence."
+          },
+          "metrics": {
+            "type": "object",
+            "description": "Readable values behind the verdict. Keys vary by detector (observed: `first_status`, `http_status`, `body_chars`, `wall_text`, `isp`, `exit_flagged_as_proxy`, `ja3`, `ja4`, `timezone`, `settle_ms` and others). Absent on some checks.",
+            "properties": {},
+            "additionalProperties": true
+          },
+          "segment": {
+            "type": "string",
+            "description": "The `segments[].id` this check ran in."
+          },
+          "round": {
+            "type": "integer",
+            "description": "Round number when a segment pairs subjects round by round."
+          },
+          "kernel": {
+            "type": "string",
+            "description": "Browser build, when it differs from the run's."
+          },
+          "proxy": {
+            "$ref": "#/components/schemas/Proxy"
+          },
+          "evidence_url": {
+            "type": "string",
+            "description": "A capture URL, or null.",
+            "nullable": true
+          },
+          "checked_at": {
+            "type": "string",
+            "description": "ISO 8601 timestamp (date-only where only a date was recorded)."
+          }
+        },
+        "required": [
+          "detector",
+          "target",
+          "subject",
+          "result",
+          "detail",
+          "segment",
+          "evidence_url",
+          "checked_at"
+        ],
+        "additionalProperties": true
+      }
+    }
+  }
+}

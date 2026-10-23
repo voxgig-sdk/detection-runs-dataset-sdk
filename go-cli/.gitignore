@@ -1,0 +1,4 @@
+/dist/
+/detection-runs-dataset-cli
+/go-cli
+.jostraca/

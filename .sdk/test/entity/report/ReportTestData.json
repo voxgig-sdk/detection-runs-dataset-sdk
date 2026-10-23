@@ -1,0 +1,93 @@
+{
+  "existing": {
+    "report": {
+      "REPORT00": {
+        "canonical": "sa0",
+        "checks": [],
+        "finished_at": "sa2",
+        "host": "sa3",
+        "id": "REPORT00",
+        "kernel": "sa5",
+        "license": "sa6",
+        "notes": [],
+        "proxy": {},
+        "run_id": "RUN01",
+        "schema_version": 170,
+        "segments": [],
+        "slug": "sac",
+        "started_at": "sad",
+        "subjects": [],
+        "title": "saf"
+      },
+      "REPORT01": {
+        "canonical": "s140",
+        "checks": [],
+        "finished_at": "s142",
+        "host": "s143",
+        "id": "REPORT01",
+        "kernel": "s145",
+        "license": "s146",
+        "notes": [],
+        "proxy": {},
+        "run_id": "RUN01",
+        "schema_version": 330,
+        "segments": [],
+        "slug": "s14c",
+        "started_at": "s14d",
+        "subjects": [],
+        "title": "s14f"
+      },
+      "REPORT02": {
+        "canonical": "s1e0",
+        "checks": [],
+        "finished_at": "s1e2",
+        "host": "s1e3",
+        "id": "REPORT02",
+        "kernel": "s1e5",
+        "license": "s1e6",
+        "notes": [],
+        "proxy": {},
+        "run_id": "RUN01",
+        "schema_version": 490,
+        "segments": [],
+        "slug": "s1ec",
+        "started_at": "s1ed",
+        "subjects": [],
+        "title": "s1ef"
+      }
+    }
+  },
+  "new": {
+    "report": {
+      "report_ref01": {
+        "canonical": "s280",
+        "checks": [],
+        "finished_at": "s282",
+        "host": "s283",
+        "kernel": "s285",
+        "license": "s286",
+        "notes": [],
+        "proxy": {},
+        "run_id": "RUN01",
+        "schema_version": 650,
+        "segments": [],
+        "slug": "s28c",
+        "started_at": "s28d",
+        "subjects": [],
+        "title": "s28f"
+      }
+    }
+  },
+  "requests": {
+    "GET /reports": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "GET /reports/{slug}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

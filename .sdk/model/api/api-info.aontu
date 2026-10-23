@@ -1,0 +1,25 @@
+# API Information
+
+
+main: {
+  kit: {
+    info: {
+      auth: false
+      contact: {
+        url: "https://antibrow.com/reports/data"
+      }
+      description: "AntiBrow's public dataset of browser-fingerprinting and anti-bot detection runs (CC BY 4.0, no key, CORS open). Knowledge comes from the field documentation at https://antibrow.com/reports/data and from live GET probes on 2026-10-23, when two runs were published (`detection-2026-08`, `detection-2026-09`). `/reports/{slug}` was found by probing (the docs name only `/api/v1/reports`); it returns the same object as the static file `https://antibrow.com/reports/{slug}/data.json`, and `/reports` returns the same body as `https://antibrow.com/reports/all.json`. Unknown slugs return 404 with `{\"error\":{\"code\":\"NOT_FOUND\",\"message\":\"Unknown run\"}}`. Not modelled: the CSV downloads. Unverified: the full set of `metrics` keys, which vary by detector."
+      servers: [
+        {
+          description: "AntiBrow public API"
+          url: "https://antibrow.com/api/v1"
+        }
+      ]
+      summary: "AntiBrow's public dataset of browser-fingerprinting and anti-bot detection runs (CC BY 4.0, no key, CORS open)."
+      title: "Detection Runs Dataset"
+      version: "1.0.0"
+      website: "https://antibrow.com"
+    }
+  }
+}
+

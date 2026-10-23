@@ -1,0 +1,20 @@
+{
+  "files": [
+    "SUMMARY.md"
+  ],
+  "config": ".sdk/doc/qa/vale.ini",
+  "routes": {},
+  "quoted": {
+    "SUMMARY.md": [
+      "AntiBrow public API",
+      "AntiBrow&#39;s public dataset of browser-fingerprinting and anti-bot detection runs (CC BY 4.0, no key, CORS open). Knowledge comes from the field documentation at https://antibrow.com/reports/data and from live GET probes on 2026-10-23, when two runs were published (`detection-2026-08`, `detection-2026-09`). `/reports/&#123;slug&#125;` was found by probing (the docs name only `/api/v1/reports`); it returns the same object as the static file `https://antibrow.com/reports/&#123;slug&#125;/data.json`, and `/reports` returns the same body as `https://antibrow.com/reports/all.json`. Unknown slugs return 404 with `&#123;&quot;error&quot;:&#123;&quot;code&quot;:&quot;NOT_FOUND&quot;,&quot;message&quot;:&quot;Unknown run&quot;&#125;&#125;`. Not modelled: the CSV downloads. Unverified: the full set of `metrics` keys, which vary by detector.",
+      "Browser build the run was headlined on, for example `Chrome 153`.",
+      "Every run",
+      "ISO 8601 (date-only where only a date was recorded).",
+      "Machine the run was driven from, for example `macOS, headful`.",
+      "Subject id that checks refer to, for example `antibrow`.",
+      "The dataset page.",
+      "The run"
+    ]
+  }
+}
